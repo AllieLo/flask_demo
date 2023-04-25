@@ -19,7 +19,7 @@ stocks = [
 def pm25():
     if request.method == "GET":
         columns, values = get_pm25()
-        # 單純使用GET才能這樣寫
+        # 單純使用GET才能這樣寫=>request.args.get(name)
         # if request.args.get('sort'):
         #     columns, values = get_pm25(True)
     if request.method == "POST":
