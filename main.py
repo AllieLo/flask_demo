@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from datetime import datetime
 from pm25 import get_pm25, get_pm25_db
+import json
 
 # 透過Flask(類別)產生實體物件(主程式__name__)-->run server
 app = Flask(__name__)
@@ -15,6 +16,37 @@ stocks = [
 # 建立首頁：函式綁定網頁
 
 
+@app.route("/update")
+def update_db():
+    import pm25_db
+
+    return "資料庫更新成功"
+
+
+@app.route("/pm25-charts")
+def pm25_charts():
+    return render_template("./pm25_charts.html")
+
+
+@app.route("/pm25-data", methods=["POST"])
+def get_pm25_data():
+    columns, values = get_pm25_db()
+    # 縣市
+    county = [value[1] for value in values]
+
+    # 站點名稱
+    site = [value[0] for value in values]
+
+    # PM2.5數值
+    pm25 = [value[2] for value in values]
+
+    datas = {"county": county, "site": site, "pm25": pm25}
+
+    return json.dumps(datas, ensure_ascii=False)
+
+    print("county", "site", "pm25")
+
+
 @app.route("/pm25", methods=["GET", "POST"])
 def pm25():
     if request.method == "GET":
@@ -27,6 +59,9 @@ def pm25():
             columns, values = get_pm25_db(True)
         else:
             columns, values = get_pm25_db()
+
+    print(columns, values)
+
     return render_template("./pm25.html", **locals())
 
 

@@ -8,15 +8,16 @@ def get_pm25_db(sort=False):
         cursor = conn.cursor()
 
         # 組合標題
-        columns = ["站點名稱", "縣市", "PM2.5", "更新時間"]
+        columns = ["site", "county", "pm25", "updatetime"]
         # 組合內容
         # values = list(cursor.execute('select site,county,pm25,datacreationdate from data'))
         sqlstr = """
             SELECT site, county,pm25,datacreationdate
             FROM data
-            WHERE (site,MAX(datacreationdate)) IN (
-            FROM data
-            GROUP BY site
+            WHERE (site,datacreationdate) IN (
+                SELECT site, MAX(datacreationdate)
+                FROM data
+                GROUP BY site
        
         )"""
 
