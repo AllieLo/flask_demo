@@ -14,7 +14,7 @@ function getTime(fullTime = true) {
     let month = now.getMonth() + 1;
     let date = now.getDate();
     let hours = now.getHours();
-    let minutes = now.getMinutes();
+    let minutes = String(now.getMinutes()).padStart(2, "0");
     let seconds = String(now.getSeconds()).padStart(2, "0");
 
     if (fullTime) {
