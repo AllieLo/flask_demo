@@ -3,10 +3,6 @@ const dateEl = document.querySelector(".date");
 
 dateEl.innerText = getTime();
 
-
-
-
-
 // 取得今天日期
 function getTime(fullTime = true) {
     let now = new Date();

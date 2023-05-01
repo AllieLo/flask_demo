@@ -1,5 +1,6 @@
 import requests, sqlite3
 
+# https://data.gov.tw/dataset/34827
 url = "https://data.epa.gov.tw/api/v2/aqx_p_02?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=datacreationdate%20desc&format=JSON"
 sqlstr = """
 create table if not exists data(
@@ -50,8 +51,8 @@ def write_db():
             sqlstr = f'select * from data where site="{data[0]}" and datacreationdate="{data[-2]}"'
             result = list(cursor.execute(sqlstr))
             if result == []:
-                sqlstr = f'insert into data(site,county,pm25,datacreationdate,itemunit) values\
-                ("{data[0]}","{data[1]}",{data[2]},"{data[3]}","{data[4]}")'
+                sqlstr = f'insert into data(site,county,pm25,datacreationdate,itemunit) values("{data[0]}","{data[1]}",\
+                {data[2]},"{data[3]}","{data[4]}")'
                 cursor.execute(sqlstr)
                 count += 1
         except Exception as e:
