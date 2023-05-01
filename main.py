@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from datetime import datetime
-from pm25 import get_pm25
+from pm25 import get_pm25, get_pm25_db, get_six_pm25
 import json
 
 # 透過Flask(類別)產生實體物件(主程式__name__)-->run server
@@ -30,7 +30,7 @@ def pm25_charts():
 
 @app.route("/pm25-data", methods=["POST"])
 def get_pm25_data():
-    columns, values = get_pm25()
+    columns, values = get_pm25_db()
 
     datas = {"error": "連線錯誤!"}
     if values is not None:
@@ -40,6 +40,10 @@ def get_pm25_data():
         site = [value[0] for value in values]
         # pm2.5數值
         pm25 = [value[2] for value in values]
+
+        # result = list(zip(site, pm25))
+        # sorted_data = sorted(result, key=lambda x: x[-1])
+        # print(sorted_data)
 
         result = list(zip(site, pm25))
         sorted_data = sorted(result, key=lambda x: x[-1])
@@ -60,13 +64,13 @@ def get_pm25_data():
 @app.route("/pm25", methods=["GET", "POST"])
 def pm25():
     if request.method == "GET":
-        columns, values = get_pm25()
+        columns, values = get_pm25_db()
     # 單純使用GET才能這樣寫=>request.args.get(name)
     # if request.args.get('sort'):
     #     columns, values = get_pm25(True)
     if request.method == "POST":
         if request.form.get("sort"):
-            columns, values = get_pm25(True)
+            columns, values = get_pm25_db(True)
         else:
             columns, values = get_pm25()
 
