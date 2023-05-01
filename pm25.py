@@ -1,7 +1,22 @@
 import requests
 import sqlite3
+import pandas as pd
 
 columns, values = None, None
+
+
+def get_six_pm25():
+    six_pm25 = {}
+    six_countys = ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"]
+    # get_pm25_db()  測試內容用
+    df = pd.DataFrame(values, columns=columns)
+    print(df)
+    for county in six_countys:
+        six_pm25[county] = round(
+            df.groupby("county").get_group(county)["pm25"].astype(int).mean(), 1
+        )
+
+    return six_pm25
 
 
 def get_pm25_db(sort=False):
@@ -58,4 +73,4 @@ def get_pm25(sort=False):
 
 # 只有在本地端輸出,引用module時不會顯示
 if __name__ == "__main__":
-    print(get_pm25_db())
+    print(get_six_pm25())
