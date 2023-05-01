@@ -25,7 +25,18 @@ def update_db():
 
 @app.route("/pm25-charts")
 def pm25_charts():
-    return render_template("./pm25-charts.html")
+    return render_template("./pm25-charts-bulma.html")
+
+
+@app.route("/pm25-six-data")
+def get_six_pm25_data():
+    result = get_six_pm25()
+    datas = {
+        "county": list(result.keys()),
+        "pm25": list(result.values()),
+    }
+
+    return json.dumps(datas, ensure_ascii=False)
 
 
 @app.route("/pm25-data", methods=["POST"])

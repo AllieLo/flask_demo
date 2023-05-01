@@ -1,21 +1,28 @@
 body {
     text-align: center;
-    background-color: antiquewhite;
+    background-color: wheat;
+    font-family: 'consolas', '微軟正黑體';
 }
 
 li {
     width: 200px;
     padding: 12px;
     margin: 6px;
-    border-radius: 6px;
-    color: chocolate;
+    border-radius: 5px;
+    color: dimgray;
     display: inline-block;
     list-style-type: none;
     background-color: gold;
 }
 
 .banner {
-    background-color: cadetblue;
     padding: 12px;
-    color: white;
+    color: cornsilk;
+    background-color: tomato;
+}
+
+table {
+    width: 800px;
+    margin: 0 auto;
+    background-color: beige;
 }

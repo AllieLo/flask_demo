@@ -1,8 +1,9 @@
+// 取得元素
 const dateEl = document.querySelector(".date");
 
 dateEl.innerText = getTime();
 
-//取得時分秒跟年月日
+// 取得今天日期
 function getTime(fullTime = true) {
     let now = new Date();
     let year = now.getFullYear();

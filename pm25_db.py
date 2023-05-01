@@ -1,6 +1,6 @@
-import requests
-import sqlite3
+import requests, sqlite3
 
+# https://data.gov.tw/dataset/34827
 url = "https://data.epa.gov.tw/api/v2/aqx_p_02?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=datacreationdate%20desc&format=JSON"
 sqlstr = """
 create table if not exists data(
@@ -11,9 +11,7 @@ pm25 integer,
 datacreationdate datetime,
 itemunit text
 )
-
 """
-
 conn, cursor = None, None
 values = []
 
@@ -42,7 +40,7 @@ def connect_db():
     cursor = conn.cursor()
     cursor.execute(sqlstr)
     conn.commit()
-    print("db open")
+    print("db opened.")
 
 
 def write_db():
@@ -61,15 +59,16 @@ def write_db():
             print(e)
 
     conn.commit()
-    print(f"更新:{count}筆資料.")
+    print(f"更新 {count} 筆資料.")
 
 
-try:
-    connect_db()
-    get_data()
-    write_db()
-except Exception as e:
-    print(e)
-finally:
-    if conn is not None:
-        conn.close()
+if __name__ == "__main__":
+    try:
+        connect_db()
+        get_data()
+        write_db()
+    except Exception as e:
+        print(e)
+    finally:
+        if conn is not None:
+            conn.close()
