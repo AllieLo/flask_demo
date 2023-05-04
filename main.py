@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from datetime import datetime
-from pm25 import get_pm25, get_pm25_db, get_six_pm25
+from pm25 import get_pm25, get_pm25_db, get_six_pm25, get_county_pm25
 import json
 
 # 透過Flask(類別)產生實體物件(主程式__name__)-->run server
@@ -26,6 +26,17 @@ def update_db():
 @app.route("/pm25-charts")
 def pm25_charts():
     return render_template("./pm25-charts-bulma.html")
+
+
+@app.route("/pm25-data/<county>")
+def get_county_pm25_data(county):
+    result = get_county_pm25(county)
+    datas = {
+        "site": [data[0] for data in result],
+        "pm25": [data[1] for data in result],
+    }
+
+    return json.dumps(datas, ensure_ascii=False)
 
 
 @app.route("/pm25-six-data")
