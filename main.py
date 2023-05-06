@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from datetime import datetime
-from pm25 import get_pm25, get_pm25_db, get_six_pm25
+from pm25 import get_pm25, get_pm25_db, get_six_pm25, get_county_pm25
 import json
 
 # 透過Flask(類別)產生實體物件(主程式__name__)-->run server
@@ -25,7 +25,53 @@ def update_db():
 
 @app.route("/pm25-charts")
 def pm25_charts():
-    return render_template("./pm25-charts.html")
+    countys = [
+        "臺北市",
+        "新北市",
+        "桃園市",
+        "新竹縣",
+        "新竹市",
+        "苗栗縣",
+        "臺中市",
+        "南投縣",
+        "彰化縣",
+        "雲林縣",
+        "嘉義縣",
+        "嘉義市",
+        "臺南市",
+        "高雄市",
+        "屏東縣",
+        "基隆市",
+        "宜蘭縣",
+        "花蓮縣",
+        "臺東縣",
+        "澎湖縣",
+        "金門縣",
+        "連江縣",
+    ]
+    return render_template("./pm25-charts-bulma.html", countys=countys)
+
+
+@app.route("/pm25-data/<county>")
+def get_county_pm25_data(county):
+    result = get_county_pm25(county)
+    datas = {
+        "site": [data[0] for data in result],
+        "pm25": [data[1] for data in result],
+    }
+
+    return json.dumps(datas, ensure_ascii=False)
+
+
+@app.route("/pm25-six-data")
+def get_six_pm25_data():
+    result = get_six_pm25()
+    datas = {
+        "county": list(result.keys()),
+        "pm25": list(result.values()),
+    }
+
+    return json.dumps(datas, ensure_ascii=False)
 
 
 @app.route("/pm25-data", methods=["POST"])
@@ -64,13 +110,13 @@ def get_pm25_data():
 @app.route("/pm25", methods=["GET", "POST"])
 def pm25():
     if request.method == "GET":
-        columns, values = get_pm25_db()
+        columns, values = get_pm25()
     # 單純使用GET才能這樣寫=>request.args.get(name)
     # if request.args.get('sort'):
     #     columns, values = get_pm25(True)
     if request.method == "POST":
         if request.form.get("sort"):
-            columns, values = get_pm25_db(True)
+            columns, values = get_pm25(True)
         else:
             columns, values = get_pm25()
 
